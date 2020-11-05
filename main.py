@@ -1,4 +1,6 @@
 import sys
+import urllib.request
+
 
 
 #--------------------------------------
@@ -7,7 +9,10 @@ import sys
 
 # Webpage laden und Inhalt zurück geben
 def WepRipper(Link):
-    pass
+    uf = urllib.request.urlopen(Link)
+    html = uf.read()
+    
+    return html
 
 # Überschriften und Inhalt rippen und als Array ausgeben + Titel der Seite als Überschrift
 def Crawler(HTML):
@@ -26,7 +31,7 @@ def Error(Nachricht):
 #--------------------------------------
 # Main
 if __name__ == "__main__":
-    Links = sys.argv
+    Links = sys.argv[1:]
     print(len(Links) + " -> Links gefunden")
     if (len(Links)==0):
         Error("Keine Links gefunden!")
