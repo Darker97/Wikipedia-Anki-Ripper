@@ -30,7 +30,7 @@ def Crawler(HTML):
 
     Inhalt = []
     for i in range(0,len(Header)-1):
-        if (Text[i].text == "."):
+        if (Text[i].text == "." or Text[i].text == " " or Text[i].text == ""):
             continue
 
         obj = {}
