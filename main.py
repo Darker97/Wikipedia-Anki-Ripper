@@ -1,7 +1,8 @@
+import sys
 
-# Laden der Links und Ausgabe als Array voller Links + Name
-def LinksLaden(DateiName):
-    pass
+
+#--------------------------------------
+
 
 
 # Webpage laden und Inhalt zurück geben
@@ -17,5 +18,31 @@ def Crawler(HTML):
 def createKard(Name, Inhalt):
     pass
 
+def Error(Nachricht):
+    print(Nachricht)
+    sys.exit(0)
+
+
+#--------------------------------------
+# Main
 if __name__ == "__main__":
-    pass
+    Links = sys.argv
+    print(len(Links) + " -> Links gefunden")
+    if (len(Links)==0):
+        Error("Keine Links gefunden!")
+
+    HTML = []
+    for i in Links:
+        HTML.append(WepRipper(i))
+    print(len(HTML) + " -> webpages geladen")
+    if(len(Links)==0):
+        Error("Webpages konnten nicht geladen werden!")
+    
+    Inhalt = []
+    for o in HTML:
+        Inhalt.append(Crawler(o))
+    
+    for t in Inhalt:
+        createKard(t[0], t[1:])
+    
+    Error("Finished!")
