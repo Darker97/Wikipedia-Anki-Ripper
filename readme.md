@@ -3,8 +3,9 @@
 Ein kleines Tool um die Glossar Seiten von Wikipedia in Anki Karteikarten umzuwandeln. 
 
 ## Use
-
-'''python main.py "Link"'''
+```
+python main.py "Link"
+```
 
 ## Librarys:
 - sys
