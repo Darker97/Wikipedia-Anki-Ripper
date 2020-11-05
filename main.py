@@ -1,7 +1,8 @@
 import sys
 import urllib.request
 from bs4 import BeautifulSoup
-import genanki as anki
+import genanki
+import random
 #--------------------------------------
 
 
@@ -29,12 +30,12 @@ def Crawler(HTML):
 
     Inhalt = []
     for i in range(0,len(Header)-1):
-        if (Text[i] == "."):
+        if (Text[i].text == "."):
             continue
 
         obj = {}
-        obj['Header'] = Header[i]
-        obj['Text'] = Text[i]
+        obj['Header'] = Header[i].text
+        obj['Text'] = Text[i].text
         Inhalt.append(obj)
     
     return Titel, Inhalt
@@ -42,6 +43,34 @@ def Crawler(HTML):
 
 # Anki Karten erstellen
 def createKard(Name, Inhalt):
+    my_model = genanki.Model(
+        random.randrange(1 << 30, 1 << 31),
+        'PythonAutomatedCards',
+        fields=[
+            {'name': 'Definition'},
+            {'name': 'Answer'},
+        ],
+        templates=[
+            {
+            'name': 'Card 1',
+            'qfmt': '{{Question}}',
+            'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}',
+            },
+    ])
+    my_deck = genanki.Deck(random.randrange(1 << 30, 1 << 31), Name)
+
+    for i in Inhalt:
+        Header = i['Header']
+        Text = i['Text']
+        # print(Header + " --> " + Text)
+
+        my_note = genanki.Note(
+            model=my_model,
+            fields=[Header, Text]
+        )
+        my_deck.add_note(my_note)
+
+    genanki.Package(my_deck).write_to_file(Name + '.apkg')
     pass
 
 def Error(Nachricht):
@@ -64,11 +93,9 @@ if __name__ == "__main__":
     if(len(Links)==0):
         Error("Webpages konnten nicht geladen werden!")
     
-    Inhalt = []
     for o in HTML:
-        Inhalt.append(Crawler(o))
-    
-    for t in Inhalt:
-        createKard(t[0], t[1:])
+        Titel, Inhalt = Crawler(o)
+        createKard(Titel, Inhalt)
+        
     
     Error("Finished!")
