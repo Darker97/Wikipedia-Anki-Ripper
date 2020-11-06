@@ -34,13 +34,18 @@ def Crawler(HTML):
             obj = {}
             obj['Header'] = no.text
             obj['Text'] = ""
-            pointer = no
+            if (no.next_sibling is None):
+                pointer = None
+            else:
+                pointer = no.next_sibling.next_sibling
+
             # print(pointer.next_sibling.next_sibling)
-            while (pointer.next_sibling.next_sibling.name == "dd"):
+            while (pointer is not None and (pointer.name == "dd" or pointer.name == "dl")):
                 obj['Text'] = obj['Text'] + pointer.text
-                pointer = pointer.next_sibling.next_sibling
-                if pointer.next_sibling.next_sibling == None:
-                    break
+                if (pointer.next_sibling is None):
+                    pointer = None
+                else:
+                    pointer = pointer.next_sibling.next_sibling
 
             if (obj['Text'] == "." or obj['Text'] == " " or obj['Text'] == ""):
                 continue    
