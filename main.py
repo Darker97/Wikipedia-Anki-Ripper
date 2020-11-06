@@ -25,8 +25,10 @@ def Crawler(HTML):
     Text = soup.find_all("dd")
 
 
-    print(len(Header))
-    print(len(Text))
+    # print(len(Header))
+    # print(len(Text))
+    if (len(Header) > len(Text)):
+        return Titel, []
 
     Inhalt = []
     for i in range(0,len(Header)-1):
@@ -95,6 +97,9 @@ if __name__ == "__main__":
     
     for o in HTML:
         Titel, Inhalt = Crawler(o)
+        if len(Inhalt) == 0:
+            print(Titel + " Konnte nicht geladen werden")
+            continue
         createKard(Titel, Inhalt)
         
     
