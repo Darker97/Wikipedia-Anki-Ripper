@@ -17,6 +17,8 @@ def WepRipper(Link):
 # uberschriften und Inhalt rippen und als Array ausgeben + Titel der Seite als Uberschrift
 def Crawler(HTML):
     soup = BeautifulSoup(HTML)
+
+    # Titel des Decks und der Datei
     Titel = soup.title.string
     
     #dt ist die Uberschrift
@@ -35,6 +37,7 @@ def Crawler(HTML):
         if (Text[i].text == "." or Text[i].text == " " or Text[i].text == ""):
             continue
 
+        # Packt die gefundenen Daten in ein Object
         obj = {}
         obj['Header'] = Header[i].text
         obj['Text'] = Text[i].text

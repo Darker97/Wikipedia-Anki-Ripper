@@ -7,6 +7,8 @@ Ein kleines Tool um die Glossar Seiten von Wikipedia in Anki Karteikarten umzuwa
 python main.py "Link"
 ```
 
+Leider muss die Function "Crawler" immer wieder angepasst werden, da die Wiki Seiten nicht unbedingt einheitlich sind. 
+
 ## Librarys:
 - sys
 - urllib.request
