@@ -21,27 +21,35 @@ def Crawler(HTML):
     # Titel des Decks und der Datei
     Titel = soup.title.string
     
-    #dt ist die Uberschrift
-    Header = soup.find_all("dt")
-    #dd der Text
-    Text = soup.find_all("dd")
-
-
-    # print(len(Header))
-    # print(len(Text))
-    if (len(Header) > len(Text)):
-        return Titel, []
-
     Inhalt = []
-    for i in range(0,len(Header)-1):
-        if (Text[i].text == "." or Text[i].text == " " or Text[i].text == ""):
-            continue
 
-        # Packt die gefundenen Daten in ein Object
-        obj = {}
-        obj['Header'] = Header[i].text
-        obj['Text'] = Text[i].text
-        Inhalt.append(obj)
+    Chapters = soup.find_all("dl")
+    # print("Chapters: " + str(len(Chapters)))
+
+    for ch in Chapters:
+        notes = ch.find_all("dt")
+        # print("Notes: " + str(len(notes)))
+
+        for no in notes:
+            obj = {}
+            obj['Header'] = no.text
+            obj['Text'] = ""
+            pointer = no
+            # print(pointer.next_sibling.next_sibling)
+            while (pointer.next_sibling.next_sibling.name == "dd"):
+                obj['Text'] = obj['Text'] + pointer.text
+                pointer = pointer.next_sibling.next_sibling
+                if pointer.next_sibling.next_sibling == None:
+                    break
+
+            if (obj['Text'] == "." or obj['Text'] == " " or obj['Text'] == ""):
+                continue    
+            Inhalt.append(obj)
+
+    # print(len(Inhalt))
+
+    if (len(Inhalt) == 0):
+        return Titel, []
     
     return Titel, Inhalt
 
@@ -74,7 +82,7 @@ def createKard(Name, Inhalt):
             fields=[Header, Text]
         )
         my_deck.add_note(my_note)
-
+    print("Deck: " + Name + " -> " + str(len(Inhalt)) + " Karten erstellt")
     genanki.Package(my_deck).write_to_file(Name + '.apkg')
     pass
 
